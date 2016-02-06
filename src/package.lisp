@@ -35,8 +35,9 @@
   (recompile-with-flv (list* variable value more) env))
 
 (defun recompile-with-flv (bindings env)
-  (format t "~&; rereading file ~s" *compile-file-pathname*)
-  (format t "~&~<; binding: ~:; ~a to ~a ~:>" bindings)
+  (when *compile-verbose*
+    (format t "~&; rereading file ~s" *compile-file-pathname*)
+    (format t "~&~<; binding: ~:; ~a to ~a ~:>" bindings))
   (let* ((skipped 0)
          (expansions
           (progv (iter (for (var val) on bindings by #'cddr)
@@ -47,25 +48,27 @@
                   (for form in-file *compile-file-pathname*)
                   (ematch* (form stage)
                     (((list* 'file-local-bind _) :before)
-                     (format t "~&; skipped ~a forms." skipped)
-                     (format t "~&; file-local-bind found, compiling the remaining forms with variables bound")
+                     (when *compile-verbose*
+                       (format t "~&; skipped ~a forms." skipped)
+                       (format t "~&; file-local-bind found, compiling the remaining forms with variables bound"))
                      (setf stage :bound))
                     ((_ :before)
-                     (let ((*print-length* 2) (*print-level* 1))
-                       (format t "~&; skipping ~a" form))
+                     (when *compile-verbose*
+                       (let ((*print-length* 2) (*print-level* 1))
+                         (format t "~&; skipping ~a" form)))
                      (incf skipped))
                     ((_ :bound)
-                     (let ((*print-length* 2) (*print-level* 1))
-                       (format t "~&; expanding ~a" form))
-                     (format t "*macroexpand-hook*: ~a" *macroexpand-hook*)
+                     (when *compile-verbose*
+                       (let ((*print-length* 2) (*print-level* 1))
+                         (format t "~&; expanding ~a" form)))
                      (collect (macroexpand-all form env)))
                     (((list* 'file-local-bind _) _)
                      (error "Found a file-local-bind twice!")))))))
     (format t "~&; read ~a forms." (length expansions))
     (prog1
-      (print
-       `(progn
-          ,@expansions
-          (eval-when (:compile-toplevel :load-toplevel :execute)
-            (setf *readtable* *dumb-readtable*))))
-      (format t "~&; Resuming compilation while skipping them"))))
+      `(progn
+         ,@expansions
+         (eval-when (:compile-toplevel :load-toplevel :execute)
+           (setf *readtable* *dumb-readtable*)))
+      (when *compile-verbose*
+        (format t "~&; Resuming compilation while skipping them")))))

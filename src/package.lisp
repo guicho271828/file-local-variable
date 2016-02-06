@@ -64,7 +64,8 @@
                      (collect (macroexpand-all form env)))
                     (((list* 'file-local-bind _) _)
                      (error "Found a file-local-bind twice!")))))))
-    (format t "~&~@<; ~@;read ~a forms.~@:>" (length expansions))
+    (when *compile-verbose*
+      (format t "~&~@<; ~@;read ~a forms.~@:>" (length expansions)))
     (prog1
       `(progn
          ,@expansions

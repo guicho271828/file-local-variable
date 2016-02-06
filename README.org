@@ -24,7 +24,7 @@ Implements a file-local variable using a carefully designed file-reloading schem
 
 ** How It Works
 
-1. =flv:file-local-setf= dynamically binds the variable using =let*=, and
+1. =flv:file-local-bind= dynamically binds the variable using =let*=, and
    reread/recompile/reload the current =*compile-pathanme*= /
    =*load-pathname*= using a custom reader.
 2. rereading happens as follows:

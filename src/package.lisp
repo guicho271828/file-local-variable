@@ -11,8 +11,7 @@
                 #+ccl :ccl
                 :macroexpand-all)
   (:export
-   #:file-local-bind
-   #:file-local-unbind))
+   #:file-local-bind))
 
 (in-package :file-local-variable)
 

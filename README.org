@@ -39,7 +39,7 @@ Implements a file-local variable using a carefully designed file-reloading schem
 3. Skips the rest of the forms by assigning =*dumb-readtable*= to
    =*readtable*= , i.e., a readtable which treats all characters
    as [[http://www.lispworks.com/documentation/HyperSpec/Body/02_ad.htm][whitespace characters]].
-4. Since =*readtable*= is file-local, it is unbound when the file
+4. Since =*readtable*= is file-local as specified by ANSI, it is unbound when the file
    compilation finishes.
 
 ** Dependencies

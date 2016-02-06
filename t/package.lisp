@@ -22,8 +22,12 @@
 
 (test file-local-variable
   (with-input-from-string (in (with-output-to-string (*standard-output*)
-                                (compile-file "example/example3.lisp")))
+                                (compile-file "example/example.lisp")))
     (is (eq :compile-toplevel (read in)))
+    (is (eq 'myhook (read in))))
+  (with-input-from-string (in (with-output-to-string (*standard-output*)
+                                (load (compile-file-pathname "example/example.lisp"))))
+    (is (eq :load-toplevel (read in)))
     (is (eq 'myhook (read in)))))
 
 

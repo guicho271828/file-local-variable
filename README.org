@@ -28,18 +28,18 @@ Implements a file-local variable using a carefully designed file-reloading schem
 ** How It Works
 
 1. =flv:file-local-bind= dynamically binds the variable using =progv=, and
-   opens the current =*compile-pathanme*=.
-2. Reread the file as follows:
-   1. It skips the forms until the first appearance of =flv:file-local-bind=.
-   2. It skips the =flv:file-local-bind= form.
-   3. It reads, then macroexpands the rest of the forms. (Currently it depends
-      on the implementation-specific =macroexpand-all=.)
-      =flv:file-local-bind= expands into a =progn= containing their
+   opens the current =*compile-pathanme*=. Within the dynamic environment
+   of =progv=, reread the file as follows:
+   1. Skip the forms until the first appearance of =flv:file-local-bind=.
+   2. Skip the =flv:file-local-bind= form.
+   3. Read, then macroexpands the rest of the forms. Currently it depends
+      on the implementation-specific =macroexpand-all=.
+   4. =flv:file-local-bind= expands into a =progn= containing their
       expansion results.
-3. Skips the rest of the forms by assigning =*dumb-readtable*= to
+2. Skips the rest of the forms by assigning =*dumb-readtable*= to
    =*readtable*= , i.e., a readtable which treats all characters
    as [[http://www.lispworks.com/documentation/HyperSpec/Body/02_ad.htm][whitespace characters]].
-4. Since =*readtable*= is file-local as specified by ANSI, it is unbound when the file
+3. Since =*readtable*= is file-local as specified by ANSI, it is unbound when the file
    compilation finishes.
 
 ** Dependencies

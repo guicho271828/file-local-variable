@@ -28,4 +28,4 @@
                 :components
                 ((:file "package"))))
   :description "File-local variable independent from ASDF"
-  :in-order-to ((test-op (load-op :file-local-variable.test))))
+  :in-order-to ((test-op (test-op :file-local-variable.test))))

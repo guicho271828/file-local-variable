@@ -36,8 +36,8 @@
 
 (defun recompile-with-flv (bindings env)
   (when *compile-verbose*
-    (format t "~&; rereading file ~s" *compile-file-pathname*)
-    (format t "~&~<; binding: ~:; ~a to ~a ~:>" bindings))
+    (format t "~&~@<; ~@; rereading ~a ~@:>" *compile-file-pathname*)
+    (format t "~&~<; binding: ~@; ~a to ~a ~@:>" bindings))
   (let* ((skipped 0)
          (expansions
           (progv (iter (for (var val) on bindings by #'cddr)
@@ -49,26 +49,26 @@
                   (ematch* (form stage)
                     (((list* 'file-local-bind _) :before)
                      (when *compile-verbose*
-                       (format t "~&; skipped ~a forms." skipped)
-                       (format t "~&; file-local-bind found, compiling the remaining forms with variables bound"))
+                       (format t "~&~@<; ~@;skipped ~a forms. ~@:>" skipped)
+                       (format t "~&~@<; ~@;file-local-bind found, compiling the remaining forms with variables bound. ~@:>"))
                      (setf stage :bound))
                     ((_ :before)
                      (when *compile-verbose*
-                       (let ((*print-length* 2) (*print-level* 1))
-                         (format t "~&; skipping ~a" form)))
+                       (let ((*print-length* 2) (*print-level* 2))
+                         (format t "~&~@<; ~@;skipping ~a ~@:>" form)))
                      (incf skipped))
                     ((_ :bound)
                      (when *compile-verbose*
-                       (let ((*print-length* 2) (*print-level* 1))
-                         (format t "~&; expanding ~a" form)))
+                       (let ((*print-length* 2) (*print-level* 2))
+                         (format t "~&~@<; ~@;expanding ~a ~@:>" form)))
                      (collect (macroexpand-all form env)))
                     (((list* 'file-local-bind _) _)
                      (error "Found a file-local-bind twice!")))))))
-    (format t "~&; read ~a forms." (length expansions))
+    (format t "~&~@<; ~@;read ~a forms.~@:>" (length expansions))
     (prog1
       `(progn
          ,@expansions
          (eval-when (:compile-toplevel :load-toplevel :execute)
            (setf *readtable* *dumb-readtable*)))
       (when *compile-verbose*
-        (format t "~&; Resuming compilation while skipping them")))))
+        (format t "~&~@<; ~@;Resuming compilation while skipping these ~a forms. ~@:>" (length expansions))))))

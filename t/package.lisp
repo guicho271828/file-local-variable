@@ -18,9 +18,13 @@
 
 ;; run test with (run! test-name) 
 
-(test file-local-variable
 
-  )
+
+(test file-local-variable
+  (with-input-from-string (in (with-output-to-string (*standard-output*)
+                                (compile-file "example/example3.lisp")))
+    (is (eq :compile-toplevel (read in)))
+    (is (eq 'myhook (read in)))))
 
 
 

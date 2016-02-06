@@ -20,5 +20,9 @@
   :components ((:module "t"
                 :components
                 ((:file "package"))))
-  :perform (load-op :after (op c) (eval (read-from-string "(every #'fiveam::TEST-PASSED-P (5am:run! :file-local-variable))"))
-))
+  :perform (test-op :around (op c)
+                    (let ((*default-pathname-defaults* (asdf:system-source-directory :file-local-variable)))
+                      (call-next-method)))
+  :perform (test-op :after (op c)
+                    (eval (read-from-string
+                           "(every #'fiveam::TEST-PASSED-P (5am:run! :file-local-variable))"))))

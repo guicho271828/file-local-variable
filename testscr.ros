@@ -10,7 +10,7 @@ exec ros -Q -- $0 "$@"
   (declare (ignorable argv))
   (uiop:quit (if (handler-case
                      (progn
-                       (asdf:load-system :file-local-variable.test)
+                       (ql:quickload :file-local-variable.test)
                        (eval (read-from-string "(every #'fiveam::TEST-PASSED-P (5am:run! :file-local-variable))")))
                    (serious-condition (c)
                      (describe c)

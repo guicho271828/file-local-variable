@@ -30,9 +30,9 @@ Implements a file-local variable using a carefully designed file-reloading schem
 1. =flv:file-local-bind= dynamically binds the variable using =progv=, and
    opens the current =*compile-pathanme*=.
 2. Reread the file as follows:
-   1. Skip the forms until the first appearance of =flv:file-local-bind=.
-   2. Skips the =flv:file-local-bind= form.
-   3. Read, then macroexpand the rest of the forms. (Currently it depends
+   1. It skips the forms until the first appearance of =flv:file-local-bind=.
+   2. It skips the =flv:file-local-bind= form.
+   3. It reads, then macroexpands the rest of the forms. (Currently it depends
       on the implementation-specific =macroexpand-all=.)
       =flv:file-local-bind= expands into a =progn= containing their
       expansion results.

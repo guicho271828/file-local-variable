@@ -24,17 +24,16 @@ Implements a file-local variable using a carefully designed file-reloading schem
 
 ** How It Works
 
-1. =flv:file-local-bind= dynamically binds the variable using =let*=, and
-   reread/recompile/reload the current =*compile-pathanme*= /
-   =*load-pathname*= using a custom reader.
-2. rereading happens as follows:
-   1. it skips the forms until the first appearance of =flv:file-local-bind=.
-   2. read, then macroexpand or evaluate the rest of the forms.
-   3. it ensures the last form is =flv:file-local-unbind=, or signals an error.
-3. In compilation-time, =flv:file-local-bind= itself expands into a =progn=
-   containing the expansion results of the reread forms.
-4. It then skips the rest of the forms by assigning =*read-suppress*=
-   to =t=.
+1. =flv:file-local-bind= dynamically binds the variable using =progv= or
+   =let*=, and reread/recompile the current =*compile-pathanme*= using a
+   custom reader.
+2. Reread the file as follows:
+   1. Skip the forms until the first appearance of =flv:file-local-bind=.
+   2. Read, then macroexpand or evaluate the rest of the forms.
+   3. Ensure the last form is =flv:file-local-unbind=, or signals an error.
+3. =flv:file-local-bind= expands into a =progn= containing the expansion
+   results of the reread forms.
+4. Skips the rest of the forms.
 5. Finally, =flv:file-local-unbind= which is ensured to exist in the file
    as the last form, restore the bound variables and =*read-suppress*=.
 

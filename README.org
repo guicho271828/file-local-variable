@@ -1,0 +1,77 @@
+
+* File-Local-Variable  - File-local variable independent from ASDF
+
+Implements a file-local variable using a carefully designed file-reloading scheme.
+
+#+BEGIN_SRC lisp
+
+(defpackage file-local-variable.example
+  (:use :cl))
+
+(in-package :file-local-variable.example)
+
+(defun myhook (macrofn form env)
+  (print form)
+  (funcall macrofn form env))
+
+(flv:file-local-bind *macroexpand-hook* #'myhook)
+
+(print *macroexpand-hook*)
+
+(flv:file-local-unbind)
+
+#+END_SRC
+
+** How It Works
+
+1. =flv:file-local-setf= dynamically binds the variable using =let*=, and
+   reread/recompile/reload the current =*compile-pathanme*= /
+   =*load-pathname*= using a custom reader.
+2. rereading happens as follows:
+   1. it skips the forms until the first appearance of =flv:file-local-bind=.
+   2. read, then macroexpand or evaluate the rest of the forms.
+   3. it ensures the last form is =flv:file-local-unbind=, or signals an error.
+3. In compilation-time, =flv:file-local-bind= itself expands into a =progn=
+   containing the expansion results of the reread forms.
+4. It then skips the rest of the forms by assigning =*read-suppress*=
+   to =t=.
+5. Finally, =flv:file-local-unbind= which is ensured to exist in the file
+   as the last form, restore the bound variables and =*read-suppress*=.
+
+** Dependencies
+
+This library is at least tested on implementation listed below:
+
++ SBCL 1.3.2 on X86-64 Linux  3.19.0-49-generic (author's environment)
+
+Also, it depends on the following libraries:
+
++ iterate by  ::
+    Jonathan Amsterdam's iterator/gatherer/accumulator facility
+
++ alexandria by  ::
+    Alexandria is a collection of portable public domain utilities.
+
++ trivia  ::
+    
+
+
+
+** Installation
+
+
+** Author
+
++ Masataro Asai (guicho2.71828@gmail.com)
+
+* Copyright
+
+Copyright (c) 2016 Masataro Asai (guicho2.71828@gmail.com)
+
+
+* License
+
+Licensed under the LLGPL License.
+
+
+

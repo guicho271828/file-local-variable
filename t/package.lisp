@@ -24,11 +24,13 @@
   (with-input-from-string (in (with-output-to-string (*standard-output*)
                                 (compile-file "example/example.lisp")))
     (is (eq :compile-toplevel (read in)))
-    (is (eq 'myhook (read in))))
+    (is (eq 'myhook (read in)))
+    (is (eq 'double-float (read in))))
   (with-input-from-string (in (with-output-to-string (*standard-output*)
                                 (load (compile-file-pathname "example/example.lisp"))))
     (is (eq :load-toplevel (read in)))
-    (is (eq 'myhook (read in)))))
+    (is (eq 'myhook (read in)))
+    (is (eq 'double-float (read in)))))
 
 
 

@@ -27,6 +27,12 @@ Implements a file-local variable using a carefully designed file-reloading schem
 
 #+END_SRC
 
+** syntax
+
+The syntax is same as =setf=.
+
+: (flv:file-local-bind var val &rest more)
+
 ** How It Works
 
 1. =flv:file-local-bind= dynamically binds the variable using =progv=, and

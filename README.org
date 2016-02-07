@@ -1,7 +1,7 @@
 
 * File-Local-Variable  - File-local variable independent from ASDF
 
-[[https://circleci.com/gh/guicho271828/file-local-variable.svg?style=svg][https://circleci.com/gh/guicho271828/file-local-variable]]
+[[https://circleci.com/gh/guicho271828/file-local-variable][https://circleci.com/gh/guicho271828/file-local-variable.svg?style=svg]]
 
 Implements a file-local variable using a carefully designed file-reloading scheme.
 

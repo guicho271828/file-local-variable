@@ -33,6 +33,16 @@ The syntax is the same as =setf=.
 
 : (file-local-bind var val &rest more)
 
+** Related work
+
+ASDF-FLV, but it depends on ASDF. by Didier Verna.
+
+http://www.cliki.net/asdf-flv
+
+CDR 9 proposal (File-local variables) by Didier Verna.
+
+https://common-lisp.net/project/cdr/document/9/verna.11.cdr2.pdf
+
 ** How It Works
 
 1. =flv:file-local-bind= dynamically binds the variable using =progv=, and

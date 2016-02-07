@@ -29,9 +29,9 @@ Implements a file-local variable using a carefully designed file-reloading schem
 
 ** syntax
 
-The syntax is same as =setf=.
+The syntax is the same as =setf=.
 
-: (flv:file-local-bind var val &rest more)
+: (file-local-bind var val &rest more)
 
 ** How It Works
 

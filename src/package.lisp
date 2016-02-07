@@ -25,7 +25,9 @@
                ;; #+sbcl sb-int:base-char-code-limit
                ;; #-(or sbcl)
                char-code-limit)
-          (set-syntax-from-char (code-char code) #\Space rt srt)
+          (for char = (code-char code))
+          (when (typep char 'base-char)
+            (set-syntax-from-char char #\Space rt srt))
           (finally (return rt))))
 
 ;; blah blah blah.
